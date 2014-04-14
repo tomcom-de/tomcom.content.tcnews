@@ -1,10 +1,55 @@
-<metal:block metal:use-macro="context/main_template/macros/master"
-             i18n:domain="plone">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
 
-<metal:content-core fill-slot="content-core">
-    <metal:content-core define-macro="content-core">
+
+<metal:content-core fill-slot="main">
+    <metal:content-core define-macro="main"
+           tal:define="to_time python:here.getAdapter('totime')">
+
+    <h1 class="documentFirstHeading"
+        tal:content="here/Title"/>
+
+    <p tal:content="python: to_time(here.created())"/>
+
+    <p class="documentDescription"
+       tal:content="structure context/getRawDescription"/>
+
+    <div id="content-core" class="aacnews-item cwell-plain clearfix"
+         tal:define="get_level python:here.getAdapter('getlevel');
+                     easyvoc nocall:here/@@easyvoc;
+                     brain_images python:get_level(brain=context,portal_types=['Image']);"
+            i18n:domain="plone">
+
+        <img class="img-thumbnail image-right"
+                         tal:attributes="src string:${here/absolute_url}/image_mini" />
+
+        <tal:block tal:content="structure context/getText"/>
+
+            <tal:block tal:condition="python: here.getRelatedItems()">
+                <hr/>
+                <div class="row image-listing-press">
+                    <tal:block tal:repeat="brainrel python:here.getRelatedItems()">
+                        <div class="element col-md-6">
+
+                            <img class="product-element-image img-thumbnail img-responsive"
+                                 tal:attributes="src python:brainrel.absolute_url()+'/image_large';
+                                                 alt brainrel/Title"/>
+                            <b class="image-title" tal:content="brainrel/Title"/>
+
+                        </div>
+                    </tal:block>
+                </div>
+            </tal:block>
+
+    </div>
 
     </metal:content-core>
 </metal:content-core>
 
-</metal:block>
+</html>
+

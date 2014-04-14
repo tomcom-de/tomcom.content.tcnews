@@ -18,6 +18,7 @@ from tomcom.content.tcnews.config import *
 
 ##code-section module-header #fill in your manual code here
 from Products.ATContentTypes.content.folder import ATFolder
+from Products.ATContentTypes.content.schemata import relatedItemsField
 from Products.ATContentTypes.content.base import registerATCT as registerType
 from Products.ATContentTypes import ATCTMessageFactory as _
 from DateTime import DateTime
@@ -84,8 +85,11 @@ schema = Schema((
 
 TCNews_schema = ATFolder.schema.copy()+schema.copy()
 
+TCNews_schema.addField(relatedItemsField.copy())
 ##code-section after-schema #fill in your manual code here
 TCNews_schema['creation_date'].widget.visible={'edit':'visible', 'view':'invisible'}
+TCNews_schema['relatedItems'].schemata='default'
+TCNews_schema['relatedItems'].callStorageOnSet=True
 ##/code-section after-schema
 
 class ITCNews(Interface):

@@ -18,6 +18,7 @@
         name="tcnews"/>
     <!-- /##Static resource -->
 
+    <include package=".browser" />
     <include file="profiles.zcml" />
 
     <pt:registry
